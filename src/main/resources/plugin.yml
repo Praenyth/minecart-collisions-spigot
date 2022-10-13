@@ -1,0 +1,8 @@
+name: MinecartCollisions
+version: '${project.version}'
+main: me.praenyth.plugins.minecartcollisions.MinecartCollisions
+api-version: 1.19
+prefix: MnecrtCllison
+authors: [ Prae ]
+description: Minecart collision plugin made for ProbablyNotDaniel
+website: https://twitter.com/praenyth
