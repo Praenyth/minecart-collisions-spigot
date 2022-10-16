@@ -1,5 +1,7 @@
 package me.praenyth.plugins.minecartcollisions.events;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -12,6 +14,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Objects;
+
 public class CollisionListener implements Listener {
 
     @EventHandler
@@ -20,12 +24,17 @@ public class CollisionListener implements Listener {
 
         Minecart cart = null;
 
-        if (vehicle instanceof RideableMinecart) {
+        if (vehicle instanceof Minecart) {
             cart = (RideableMinecart) vehicle;
             cart.setMaxSpeed(20f);
-        } else if (vehicle instanceof Minecart) {
-            cart = (Minecart) vehicle;
-            cart.setMaxSpeed(20f);
+            if (cart.getPassengers().size() >= 1) {
+                if (vehicle.getPassengers().get(0) instanceof Player) {
+                    Player riding = (Player) vehicle.getPassengers().get(0);
+                    if (riding.getInventory().getItemInOffHand().getType().equals(Material.FEATHER) || riding.getInventory().getItemInMainHand().getType().equals(Material.FEATHER)) {
+                        cart.setMaxSpeed(100f);
+                    }
+                }
+            }
         }
 
         if (cart != null) {
@@ -35,12 +44,18 @@ public class CollisionListener implements Listener {
 
                         LivingEntity hitEntity = (LivingEntity) entity;
 
-                        if (cart.getVelocity().length() > 1) {
+                        if (cart.getVelocity().length() > 2) {
 
                             if (cart.getPassengers().size() >= 1) {
                                 if (hitEntity instanceof Player) {
                                     if (!((Player)hitEntity).isFlying()) {
                                         hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
+                                        if (vehicle.getPassengers().get(0) instanceof Player) {
+                                            Player riding = (Player) vehicle.getPassengers().get(0);
+                                            if (riding.getInventory().getItemInOffHand().getType().equals(Material.TNT) || riding.getInventory().getItemInMainHand().getType().equals(Material.TNT)) {
+                                                riding.getWorld().createExplosion(riding.getLocation(), 3f);
+                                            }
+                                        }
                                     }
                                     damagePlayer(((Player)hitEntity), 12, cart);
 
