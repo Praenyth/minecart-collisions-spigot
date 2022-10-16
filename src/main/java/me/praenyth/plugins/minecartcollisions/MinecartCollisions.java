@@ -10,7 +10,7 @@ public final class MinecartCollisions extends JavaPlugin {
         // Plugin startup logic
         getServer().getPluginManager().registerEvents(new CollisionListener(), this);
 
-        getServer().getLogger().info("easy");
+        getServer().getLogger().info("ok plugin done loading now wowza");
     }
 
     @Override

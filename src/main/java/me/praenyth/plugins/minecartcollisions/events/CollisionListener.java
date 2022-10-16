@@ -2,10 +2,7 @@ package me.praenyth.plugins.minecartcollisions.events;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,33 +11,55 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 public class CollisionListener implements Listener {
-
 
     @EventHandler
     public void onVehicleMove(VehicleMoveEvent e) {
         Vehicle vehicle = e.getVehicle();
-        RideableMinecart cart = null;
+
+        Minecart cart = null;
+
         if (vehicle instanceof RideableMinecart) {
             cart = (RideableMinecart) vehicle;
             cart.setMaxSpeed(20f);
+        } else if (vehicle instanceof Minecart) {
+            cart = (Minecart) vehicle;
+            cart.setMaxSpeed(20f);
         }
-        for (Entity entity : vehicle.getNearbyEntities(1, 1,1)) {
-            if (!vehicle.getPassengers().contains(entity)) {
-                if (entity instanceof LivingEntity) {
-                    LivingEntity hitEntity = (LivingEntity) entity;
-                    if (cart != null) {
-                        if (cart.getVelocity().isInAABB(hitEntity.getVelocity(), new Vector(5, 5 ,5))) {
 
-                            if (hitEntity instanceof Player) {
-                                damagePlayer(((Player)hitEntity), 12);
+        if (cart != null) {
+            for (Entity entity : cart.getNearbyEntities(2, -2,2)) {
+                if (!cart.getPassengers().contains(entity)) {
+                    if (entity instanceof LivingEntity) {
+
+                        LivingEntity hitEntity = (LivingEntity) entity;
+
+                        if (cart.getVelocity().length() > 1) {
+
+                            if (cart.getPassengers().size() >= 1) {
+                                if (hitEntity instanceof Player) {
+                                    if (!((Player)hitEntity).isFlying()) {
+                                        hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
+                                    }
+                                    damagePlayer(((Player)hitEntity), 12, cart);
+
+                                } else {
+                                    hitEntity.damage(12);
+                                    hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
+                                }
                             } else {
-                                hitEntity.damage(12);
+                                if (hitEntity instanceof Player) {
+                                    if (!((Player)hitEntity).isFlying()) {
+                                        hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
+                                    }
+                                    damagePlayer(((Player)hitEntity), 6, cart);
+                                } else {
+                                    hitEntity.damage(6);
+                                    hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
+                                }
                             }
 
-                            hitEntity.setVelocity(vehicle.getVelocity().subtract(hitEntity.getVelocity().normalize()));
                         }
                     }
                 }
@@ -48,24 +67,24 @@ public class CollisionListener implements Listener {
         }
     }
 
-    public void damagePlayer(Player p, double damage) {
+    private void damagePlayer(Player p, double damage, Entity source) {
         double points = p.getAttribute(Attribute.GENERIC_ARMOR).getValue();
         double toughness = p.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue();
         PotionEffect effect = p.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         int resistance = effect == null ? 0 : effect.getAmplifier();
         int epf = getEPF(p.getInventory());
 
-        p.damage(calculateDamageApplied(damage, points, toughness, resistance, epf));
+        p.damage(calculateDamageApplied(damage, points, toughness, resistance, epf), source);
     }
 
-    public double calculateDamageApplied(double damage, double points, double toughness, int resistance, int epf) {
+    private double calculateDamageApplied(double damage, double points, double toughness, int resistance, int epf) {
         double withArmorAndToughness = damage * (1 - Math.min(20, Math.max(points / 5, points - damage / (2 + toughness / 4))) / 25);
         double withResistance = withArmorAndToughness * (1 - (resistance * 0.2));
         double withEnchants = withResistance * (1 - (Math.min(20.0, epf) / 25));
         return withEnchants;
     }
 
-    public static int getEPF(PlayerInventory inv) {
+    private static int getEPF(PlayerInventory inv) {
         ItemStack helm = inv.getHelmet();
         ItemStack chest = inv.getChestplate();
         ItemStack legs = inv.getLeggings();
