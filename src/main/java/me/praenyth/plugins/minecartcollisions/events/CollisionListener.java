@@ -24,22 +24,24 @@ public class CollisionListener implements Listener {
         Vehicle vehicle = e.getVehicle();
         RideableMinecart cart = null;
         if (vehicle instanceof RideableMinecart) {
-             cart = (RideableMinecart) vehicle;
+            cart = (RideableMinecart) vehicle;
+            cart.setMaxSpeed(20f);
         }
-        cart.setMaxSpeed(20f);
-        for (Entity entity : vehicle.getNearbyEntities(1, 0,1)) {
+        for (Entity entity : vehicle.getNearbyEntities(1, 1,1)) {
             if (!vehicle.getPassengers().contains(entity)) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity hitEntity = (LivingEntity) entity;
-                    if (cart.getVelocity().isInAABB(hitEntity.getVelocity(), new Vector(5, 5 ,5))) {
+                    if (cart != null) {
+                        if (cart.getVelocity().isInAABB(hitEntity.getVelocity(), new Vector(5, 5 ,5))) {
 
-                        if (hitEntity instanceof Player) {
-                            damagePlayer(((Player)hitEntity), 12);
-                        } else {
-                            hitEntity.damage(12);
+                            if (hitEntity instanceof Player) {
+                                damagePlayer(((Player)hitEntity), 12);
+                            } else {
+                                hitEntity.damage(12);
+                            }
+
+                            hitEntity.setVelocity(vehicle.getVelocity().subtract(hitEntity.getVelocity().normalize()));
                         }
-
-                        hitEntity.setVelocity(vehicle.getVelocity().subtract(hitEntity.getVelocity().normalize()));
                     }
                 }
             }
