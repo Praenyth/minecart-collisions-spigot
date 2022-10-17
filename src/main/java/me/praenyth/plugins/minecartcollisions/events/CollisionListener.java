@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.Objects;
 
@@ -26,19 +27,22 @@ public class CollisionListener implements Listener {
 
         if (vehicle instanceof Minecart) {
             cart = (RideableMinecart) vehicle;
-            cart.setMaxSpeed(20f);
+            float tempSpeed = 20f;
             if (cart.getPassengers().size() >= 1) {
                 if (vehicle.getPassengers().get(0) instanceof Player) {
                     Player riding = (Player) vehicle.getPassengers().get(0);
                     if (riding.getInventory().getItemInOffHand().getType().equals(Material.FEATHER) || riding.getInventory().getItemInMainHand().getType().equals(Material.FEATHER)) {
-                        cart.setMaxSpeed(100f);
+                        tempSpeed = 100f;
+                    } else if (riding.getInventory().getItemInOffHand().getType().equals(Material.PUFFERFISH_BUCKET) || riding.getInventory().getItemInMainHand().getType().equals(Material.PUFFERFISH_BUCKET)) {
+                        tempSpeed = 1f;
                     }
                 }
             }
+            cart.setMaxSpeed(tempSpeed);
         }
 
         if (cart != null) {
-            for (Entity entity : cart.getNearbyEntities(2, -2,2)) {
+            for (Entity entity : cart.getNearbyEntities(2, -1,2)) {
                 if (!cart.getPassengers().contains(entity)) {
                     if (entity instanceof LivingEntity) {
 
@@ -48,20 +52,42 @@ public class CollisionListener implements Listener {
 
                             if (cart.getPassengers().size() >= 1) {
                                 if (hitEntity instanceof Player) {
+                                    int tempDamage = 12;
                                     if (!((Player)hitEntity).isFlying()) {
                                         hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
                                         if (vehicle.getPassengers().get(0) instanceof Player) {
                                             Player riding = (Player) vehicle.getPassengers().get(0);
                                             if (riding.getInventory().getItemInOffHand().getType().equals(Material.TNT) || riding.getInventory().getItemInMainHand().getType().equals(Material.TNT)) {
                                                 riding.getWorld().createExplosion(riding.getLocation(), 3f);
+                                            } else if (riding.getInventory().getItemInOffHand().getType().equals(Material.PUFFERFISH_BUCKET) || riding.getInventory().getItemInMainHand().getType().equals(Material.PUFFERFISH_BUCKET)) {
+                                                tempDamage = 24;
+                                            } else if (riding.getInventory().getItemInOffHand().getType().equals(Material.FEATHER) || riding.getInventory().getItemInMainHand().getType().equals(Material.FEATHER)) {
+                                                tempDamage = 0;
                                             }
                                         }
                                     }
-                                    damagePlayer(((Player)hitEntity), 12, cart);
+                                    damagePlayer(((Player)hitEntity), tempDamage, cart);
+
+                                    hitEntity.getWorld().playSound(hitEntity.getLocation(), "prae.danielsmp.minecart", 1f, 1f);
 
                                 } else {
-                                    hitEntity.damage(12);
-                                    hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
+                                    int tempDamage = 12;
+                                    Vector tempVelocity = cart.getVelocity().subtract(hitEntity.getVelocity().normalize());
+                                    if (vehicle.getPassengers().get(0) instanceof Player) {
+                                        Player riding = (Player) vehicle.getPassengers().get(0);
+                                        if (riding.getInventory().getItemInOffHand().getType().equals(Material.TNT) || riding.getInventory().getItemInMainHand().getType().equals(Material.TNT)) {
+                                            riding.getWorld().createExplosion(riding.getLocation(), 3f);
+                                        } else if (riding.getInventory().getItemInOffHand().getType().equals(Material.PUFFERFISH_BUCKET) || riding.getInventory().getItemInMainHand().getType().equals(Material.PUFFERFISH_BUCKET)) {
+                                            tempDamage = 24;
+                                        } else if (riding.getInventory().getItemInOffHand().getType().equals(Material.FEATHER) || riding.getInventory().getItemInMainHand().getType().equals(Material.FEATHER)) {
+                                            tempDamage = 0;
+                                            tempVelocity = cart.getVelocity().setY(cart.getVelocity().getY()+1);
+                                        }
+                                    }
+                                    hitEntity.damage(tempDamage);
+                                    hitEntity.setVelocity(tempVelocity);
+
+                                    hitEntity.getWorld().playSound(hitEntity.getLocation(), "prae.danielsmp.minecart", 1f, 1f);
                                 }
                             } else {
                                 if (hitEntity instanceof Player) {
@@ -69,9 +95,13 @@ public class CollisionListener implements Listener {
                                         hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
                                     }
                                     damagePlayer(((Player)hitEntity), 6, cart);
+
+                                    hitEntity.getWorld().playSound(hitEntity.getLocation(), "prae.danielsmp.minecart", 1f, 1f);
                                 } else {
                                     hitEntity.damage(6);
                                     hitEntity.setVelocity(cart.getVelocity().subtract(hitEntity.getVelocity().normalize()));
+
+                                    hitEntity.getWorld().playSound(hitEntity.getLocation(), "prae.danielsmp.minecart", 1f, 1f);
                                 }
                             }
 
