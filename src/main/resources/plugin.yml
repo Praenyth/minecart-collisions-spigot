@@ -1,8 +1,8 @@
 name: MinecartCollisions
-version: 0.2.0
+version: 0.2.2
 main: me.praenyth.plugins.minecartcollisions.MinecartCollisions
 api-version: 1.19
-prefix: MnecrtCllison
+prefix: MinecartCollisions
 authors: [ Prae ]
-description: Minecart collision plugin made for ProbablyNotDaniel
+description: Dumbass minecart collisions
 website: https://twitter.com/praenyth

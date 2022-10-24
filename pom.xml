@@ -6,12 +6,12 @@
 
     <groupId>me.praenyth.plugins</groupId>
     <artifactId>MinecartCollisions</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <packaging>jar</packaging>
 
     <name>MinecartCollisions</name>
 
-    <description>Minecart collision plugin made for ProbablyNotDaniel</description>
+    <description>Dumbass minecart collisions</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
