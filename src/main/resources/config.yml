@@ -1,0 +1,34 @@
+# ███╗░░░███╗██╗███╗░░██╗███████╗░█████╗░░█████╗░██████╗░████████╗
+# ████╗░████║██║████╗░██║██╔════╝██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝
+# ██╔████╔██║██║██╔██╗██║█████╗░░██║░░╚═╝███████║██████╔╝░░░██║░░░
+# ██║╚██╔╝██║██║██║╚████║██╔══╝░░██║░░██╗██╔══██║██╔══██╗░░░██║░░░
+# ██║░╚═╝░██║██║██║░╚███║███████╗╚█████╔╝██║░░██║██║░░██║░░░██║░░░
+# ╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚══════╝░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░
+#
+# ░█████╗░██████╗░░█████╗░░██████╗██╗░░██╗███████╗░██████╗
+# ██╔══██╗██╔══██╗██╔══██╗██╔════╝██║░░██║██╔════╝██╔════╝
+# ██║░░╚═╝██████╔╝███████║╚█████╗░███████║█████╗░░╚█████╗░
+# ██║░░██╗██╔══██╗██╔══██║░╚═══██╗██╔══██║██╔══╝░░░╚═══██╗
+# ╚█████╔╝██║░░██║██║░░██║██████╔╝██║░░██║███████╗██████╔╝
+# ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░╚═╝░░╚═╝╚══════╝╚═════╝░
+
+# Max speed of the minecart
+max-minecart-speed: 20
+
+# Change the damage done by the minecart per hit (in hearts)
+minecart-damage: 6
+
+# Change the sound for the minecart cart hit
+minecart-hit-sound: "prae.danielsmp.minecart"
+
+# toggle on or off the extra minecart sillies
+minecart-sillies:
+  minecart-tnt-crash: false
+  minecart-puffer-crash: false
+  minecart-feather-crash: false
+  minecart-anvil-crash: false
+
+# Minecart death messages
+minecart-death-messages:
+  minecart-no-passenger: "was ran over by a minecart"
+  minecart-with-passenger: "was ran over by a minecart from"

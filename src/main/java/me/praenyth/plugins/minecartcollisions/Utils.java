@@ -35,6 +35,20 @@ public class Utils {
         p.damage(calculateDamageApplied(damage, points, toughness, resistance, epf), source);
     }
 
+    public static boolean checkPlayerMinecartDeath(Player p, double damage) {
+
+        double points = p.getAttribute(Attribute.GENERIC_ARMOR).getValue();
+        double toughness = p.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue();
+        PotionEffect effect = p.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        int resistance = effect == null ? 0 : effect.getAmplifier();
+        int epf = getEPF(p.getInventory());
+
+        double finalDamage = calculateDamageApplied(damage, points, toughness, resistance, epf);
+
+        return p.getHealth() <= finalDamage;
+
+    }
+
     private static double calculateDamageApplied(double damage, double points, double toughness, int resistance, int epf) {
         double withArmorAndToughness = damage * (1 - Math.min(20, Math.max(points / 5, points - damage / (2 + toughness / 4))) / 25);
         double withResistance = withArmorAndToughness * (1 - (resistance * 0.2));
