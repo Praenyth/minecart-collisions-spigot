@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Utils {
 
-    // a bunch of shamelessly "borrowed" code
+    // damages the player (if you didn't know)
     public static void damagePlayer(Player p, double damage, Entity source) {
         double points = p.getAttribute(Attribute.GENERIC_ARMOR).getValue();
         double toughness = p.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue();
@@ -68,7 +68,8 @@ public class Utils {
                 (boot != null ? boot.getEnchantmentLevel(Enchantment.DAMAGE_ALL) : 0);
     }
 
-    public static RideableMinecart getValidMineCart(Vehicle vehicle, boolean mustHavePassenger)
+    // checks if the minecart is a valid cart
+    public static RideableMinecart getValidMinecart(Vehicle vehicle, boolean mustHavePassenger)
     {
         RideableMinecart cart = null;
 
@@ -87,7 +88,8 @@ public class Utils {
         return cart;
     }
 
-    public static Entity GetFirstPassenger(Minecart toCart)
+    // get the passengers of a minecart
+    public static Entity getFirstPassenger(Minecart toCart)
     {
         List<Entity> passengers = toCart.getPassengers();
 
@@ -97,6 +99,7 @@ public class Utils {
         return passengers.get(0);
     }
 
+    // checks if the rail is flat
     public static boolean isFlatRail(Location location)
     {
         if (location.getBlock().getType() == Material.RAIL)
@@ -110,6 +113,7 @@ public class Utils {
         return false;
     }
 
+    // checks if a rail is perpendicular to another
     public static boolean isRailPerpendicular(Location myLocation, Location otherLocation)
     {
         Block myBlock = myLocation.getBlock();
@@ -127,6 +131,7 @@ public class Utils {
         return false;
     }
 
+    // checks if a rail is parallel to another
     public static boolean isRailParallel(Location myLocation, Location otherLocation)
     {
         Block myBlock = myLocation.getBlock();
@@ -141,6 +146,7 @@ public class Utils {
         return false;
     }
 
+    // get vector from blockface
     public static Vector getUnitVectorFromYaw(float yaw)
     {
         BlockFace facing = getBlockFaceFromYaw(yaw);
@@ -157,7 +163,7 @@ public class Utils {
         }
     }
 
-
+    // checks if the area is an intersection
     public static boolean isIntersection(Location myLocation, Vector movementDirection)
     {
         if (Utils.isFlatRail(myLocation))
@@ -187,7 +193,7 @@ public class Utils {
         }
         return false;
     }
-
+    
     public static BlockFace getBlockFaceFromYaw(float yaw)
     {
 
