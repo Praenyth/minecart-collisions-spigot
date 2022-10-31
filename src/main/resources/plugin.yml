@@ -1,5 +1,5 @@
 name: MinecartCollisions
-version: 0.3.1
+version: 0.3.2
 main: me.praenyth.plugins.minecartcollisions.MinecartCollisions
 api-version: 1.19
 prefix: MinecartCollisions

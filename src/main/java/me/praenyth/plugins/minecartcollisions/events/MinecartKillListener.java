@@ -33,7 +33,7 @@ public class MinecartKillListener implements Listener {
                 recentlyHitPlayers.remove(player);
             } else {
                 if (passengers.get(0).getType().equals(EntityType.PLAYER)) {
-                    event.setDeathMessage(player.getDisplayName() + " " + config.getString("minecart-death-messages.minecart-with-passenger", "was ran over by a minecart from") + " " + passengers.get(0).getCustomName());
+                    event.setDeathMessage(player.getDisplayName() + " " + config.getString("minecart-death-messages.minecart-with-passenger", "was ran over by a minecart from") + " " + ((Player)passengers.get(0)).getDisplayName());
                     recentlyHitPlayers.remove(player);
                 } else {
                     event.setDeathMessage(player.getDisplayName() + " " + config.getString("minecart-death-messages.minecart-no-passenger", "was ran over by a minecart"));
