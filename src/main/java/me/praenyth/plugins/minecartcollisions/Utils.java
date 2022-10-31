@@ -78,7 +78,7 @@ public class Utils {
 
         cart = (RideableMinecart) vehicle;
 
-        Entity firstPassenger = GetFirstPassenger(cart);
+        Entity firstPassenger = getFirstPassenger(cart);
         if (firstPassenger == null)
             return null;
 
