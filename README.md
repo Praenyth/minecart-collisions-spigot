@@ -1,7 +1,5 @@
 # Minecart Collisions (Spigot)
 
-## not working on public spigot plugins anymore !
-
 ### Have you ever wanted to beat the everloving hell out of someone?
 
 ### Do you watch those roblox car crash compilations that are for some reason on your home page?
